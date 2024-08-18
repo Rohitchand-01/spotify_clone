@@ -1,19 +1,72 @@
-import { createContext, useRef } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
+import { songsData } from "../assets/assets";
 
-const PlayerContext = createContext();
 
-const PlayerContextProvider = (props)=>{
+export const PlayerContext = createContext();
+
+const PlayerContextProvider = (props) => {
 
     const audioRef = useRef();
+    const seekBg = useRef();
+    const seekBar = useRef();
 
-    const contextValue ={
-        audioRef
+    const [track, setTrack] = useState(songsData[0]);
+    const [playStatus, setPlayStatus] = useState(false);
+    const [time, setTime] = useState({
+        currentTime: {
+            seconds: 0,
+            minutes: 0
+        },
+        totalTime: {
+            seconds: 0,
+            minutes: 0
+        }
+    });
+
+    const play = () => {
+        audioRef.current.play();
+        setPlayStatus(true);
     }
 
-    return(
-        <PlayerContextProvider value={contextValue}>
+    const pause = () => {
+        audioRef.current.pause();
+        setPlayStatus(false);
+    }
+
+    useEffect(()=>{
+        setTimeout(() => {
+            audioRef.current.ontimeupdate = ()=>{
+                setTime(
+                    {currentTime: {
+                        seconds: Math.floor(audioRef.current.currentTime%60),
+                        minutes: Math.floor(audioRef.current.currentTime/60)
+                    },
+                    totalTime: {
+                        seconds: Math.floor(audioRef.current.duration%60),
+                        minutes: Math.floor(audioRef.current.duration/60)
+                    }}
+                )
+            };
+        }, 1000);
+    },[audioRef])
+
+
+
+    const contextValue = {
+        audioRef,
+        seekBg,
+        seekBar,
+        track,setTrack,
+        playStatus,setPlayStatus,
+        time, setTime,
+        play, pause,
+
+    }
+
+    return (
+        <PlayerContext.Provider value={contextValue}>
             {props.children}
-        </PlayerContextProvider>
+        </PlayerContext.Provider>
     )
 
 }

@@ -2,19 +2,20 @@ import React, { useContext } from 'react'
 import Sidebar from './component/Sidebar'
 import Player from './component/Player'
 import Display from './component/Display'
-// import PlayerContextProvider from './context/PlayerContext'
+import { PlayerContext } from './context/PlayerContext'
 
 const App = () => {
 
-  // const{audioRef} = useContext(PlayerContext)
+const {audioRef, track} = useContext(PlayerContext)
+
   return (
     <div className='h-screen bg-black'>
       <div className='h-[90%] flex'>
-          <Sidebar/>
-          <Display/>
+        <Sidebar />
+        <Display />
       </div>
-      <Player/>
-      {/* <audio ref={audioRef} preload='auto' ></audio> */}
+      <Player />
+      <audio ref={audioRef} src={track.file} preload='auto' ></audio>
     </div>
   )
 }
