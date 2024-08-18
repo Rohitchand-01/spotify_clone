@@ -33,22 +33,24 @@ const PlayerContextProvider = (props) => {
         setPlayStatus(false);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setTimeout(() => {
-            audioRef.current.ontimeupdate = ()=>{
-                setTime(
-                    {currentTime: {
-                        seconds: Math.floor(audioRef.current.currentTime%60),
-                        minutes: Math.floor(audioRef.current.currentTime/60)
+            setTime(
+                {
+                    currentTime: {
+                        seconds: Math.floor(audioRef.current.currentTime % 60),
+                        minutes: Math.floor(audioRef.current.currentTime / 60)
                     },
                     totalTime: {
-                        seconds: Math.floor(audioRef.current.duration%60),
-                        minutes: Math.floor(audioRef.current.duration/60)
-                    }}
-                )
-            };
+                        seconds: Math.floor(audioRef.current.duration % 60),
+                        minutes: Math.floor(audioRef.current.duration / 60)
+                    }
+                }
+            )
+
         }, 1000);
-    },[audioRef])
+
+    }, [audioRef])
 
 
 
@@ -56,8 +58,8 @@ const PlayerContextProvider = (props) => {
         audioRef,
         seekBg,
         seekBar,
-        track,setTrack,
-        playStatus,setPlayStatus,
+        track, setTrack,
+        playStatus, setPlayStatus,
         time, setTime,
         play, pause,
 
